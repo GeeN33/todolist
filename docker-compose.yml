@@ -1,0 +1,67 @@
+version: '3.9'
+
+services:
+
+  pgdb:
+    image: postgres:13-alpine
+    restart: always
+    container_name: pgdb
+    environment:
+       - POSTGRES_DB=postgresdb
+       - POSTGRES_USER=postgres
+       - POSTGRES_PASSWORD=postgres
+    volumes:
+      - pgdata:/var/lib/postgresql/data/
+    healthcheck:
+      test: pg_isready -U  postgres
+      interval: 5s
+      timeout: 3s
+      retries: 3
+    ports:
+      - "5452:5432"
+    networks:
+      - backend_nw
+
+#  django_api:
+#    build:
+#      context: .
+#      dockerfile: Dockerfile
+#    restart: always
+#
+#    env_file: .env
+#    depends_on:
+#      pgdb:
+#        condition: service_healthy
+
+  django:
+    build: .
+    container_name: django
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/usr/src/todolist/
+    ports:
+      - 8000:8000
+    environment:
+       - DEBUG=1
+       - ENGINE=django.db.backends.postgresql
+       - POSTGRES_DB=postgresdb
+       - POSTGRES_USER=postgres
+       - POSTGRES_PASSWORD=postgres
+       - POSTGRES_HOST=45.95.234.227
+       - POSTGRES_PORT=5432
+
+    depends_on:
+      - pgdb
+
+volumes:
+  pgdata:
+
+networks:
+  backend_nw:
+    driver: bridge
+
+
+
+
+
+

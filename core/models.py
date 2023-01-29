@@ -9,7 +9,7 @@ class User(AbstractUser):
     # last_name = models.CharField(null=True, max_length=50)
 
     def __str__(self):
-        return self.email
+        return self.username
 
     class Meta:
         verbose_name = 'Пользователь'
