@@ -1,26 +1,22 @@
-version: '3.9'
+version: '3.8'
 
 services:
-
-  pgdb:
-    image: postgres:13-alpine
-    restart: always
-    container_name: pgdb
-    environment:
-       - POSTGRES_DB=postgresdb
-       - POSTGRES_USER=postgres
-       - POSTGRES_PASSWORD=postgres
+  web:
+    # Берем Dockerfile из каталога app
+    build:
+      context: .
+      dockerfile: Dockerfile
+    # Запускаем тестовый сервер
+    command: python manage.py runserver 0.0.0.0:8000
+    # куда будут помещены данные из каталога app
     volumes:
-      - pgdata:/var/lib/postgresql/data/
-    healthcheck:
-      test: pg_isready -U  postgres
-      interval: 5s
-      timeout: 3s
-      retries: 3
+      - ./app/:/usr/src/app/
+    # Открываем порт 8000 внутри и снаружи
     ports:
-      - "5452:5432"
-    networks:
-      - backend_nw
+      - 8000:8000
+    # Файл содержащий переменные для контейнера
+    env_file:
+      - ./.env
 
 #  django_api:
 #    build:
@@ -33,32 +29,39 @@ services:
 #      pgdb:
 #        condition: service_healthy
 
-  django:
-    build: .
-    container_name: django
-    command: python manage.py runserver 0.0.0.0:8000
-    volumes:
-      - .:/usr/src/todolist/
-    ports:
-      - 8000:8000
-    environment:
-       - DEBUG=1
-       - ENGINE=django.db.backends.postgresql
-       - POSTGRES_DB=postgresdb
-       - POSTGRES_USER=postgres
-       - POSTGRES_PASSWORD=postgres
-       - POSTGRES_HOST=45.95.234.227
-       - POSTGRES_PORT=5432
+#  django:
+#    build:
+#      context: .
+#      dockerfile: Dockerfile
+#    command: python manage.py runserver 0.0.0.0:8000
+#    volumes:
+#      - ./app/:/usr/src/app/
+#    ports:
+#      - 8000:8000
+#    env_file:
+#      - ./.env
 
-    depends_on:
-      - pgdb
+#    depends_on:
+#      - pgdb
 
-volumes:
-  pgdata:
+#
+#  pgdb:
+#    image: postgres:13-alpine
+#    restart: always
+#    container_name: pgdb
+#    environment:
+#      - POSTGRES_DB=postgresdb
+#      - POSTGRES_USER=postgres
+#      - POSTGRES_PASSWORD=postgres
+#    volumes:
+#      - pgdata:/var/lib/postgresql/data/
+#    ports:
+#      - "5452:5432"
+#
+#volumes:
+#  pgdata:
 
-networks:
-  backend_nw:
-    driver: bridge
+
 
 
 
