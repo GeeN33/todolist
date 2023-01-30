@@ -1,8 +1,8 @@
 # образ на основе которого создаём контейнер
-FROM python:3.8.6-alpine
+FROM python:3.9.6-alpine
 
 # рабочая директория внутри проекта
-WORKDIR /usr/src/app
+WORKDIR /code
 
 # переменные окружения для python
 ENV PYTHONDONTWRITEBYTECODE 1
