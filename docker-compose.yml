@@ -4,8 +4,6 @@ services:
   web:
     # Берем Dockerfile из каталога app
     build: ./app
-#      context: .
-#      dockerfile: Dockerfile
     # Запускаем тестовый сервер
     command: python manage.py runserver 0.0.0.0:8000
     # куда будут помещены данные из каталога app
@@ -16,7 +14,7 @@ services:
       - 8000:8000
     # Файл содержащий переменные для контейнера
     env_file:
-      - ./.env
+      - ./.env.dev.dev
 
 #  django_api:
 #    build:
@@ -24,7 +22,7 @@ services:
 #      dockerfile: Dockerfile
 #    restart: always
 #
-#    env_file: .env
+#    env_file: .env.dev
 #    depends_on:
 #      pgdb:
 #        condition: service_healthy
@@ -39,7 +37,7 @@ services:
 #    ports:
 #      - 8000:8000
 #    env_file:
-#      - ./.env
+#      - ./.env.dev
 
 #    depends_on:
 #      - pgdb
