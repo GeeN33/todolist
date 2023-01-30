@@ -16,7 +16,9 @@ services:
       - ./.env
 
   django:
-    build: ./code
+    build:
+           context: .
+           dockerfile: Dockerfile
     depends_on:
       - db
     restart: always
