@@ -1,20 +1,70 @@
 version: '3.8'
 
+volumes:
+  postgres_data:
+  static:
+  media:
+  nginx_conf:
+
 services:
-  web:
-    # Берем Dockerfile из каталога app
-    build: ./app
-    # Запускаем тестовый сервер
-    command: python manage.py runserver 0.0.0.0:8000
-    # куда будут помещены данные из каталога app
+  db:
+    image: postgres:12.4
+    restart: always
     volumes:
-      - ./app/:/usr/src/app/
-    # Открываем порт 8000 внутри и снаружи
-    ports:
-      - 8000:8000
-    # Файл содержащий переменные для контейнера
+      - postgres_data:/var/lib/postgresql/data/
     env_file:
-      - ./.env.dev
+      - ./.env
+
+  django:
+    image: matakov/yamdb:latest
+    depends_on:
+      - db
+    restart: always
+    env_file:
+      - ./.env
+    volumes:
+      - static:/code/static
+      - media:/code/media
+      - nginx_conf:/code/nginx/
+    entrypoint: /code/entrypoint.sh
+
+  nginx:
+    image: nginx:1.19.0-alpine
+    ports:
+      - "80:80"
+    volumes:
+      - static:/code/static
+      - media:/code/media
+      - nginx_conf:/etc/nginx/conf.d/
+    depends_on:
+      - django
+    restart: always
+
+
+
+
+
+
+
+
+
+#version: '3.8'
+#
+#services:
+#  web:
+#    # Берем Dockerfile из каталога app
+#    build: ./app
+#    # Запускаем тестовый сервер
+#    command: python manage.py runserver 0.0.0.0:8000
+#    # куда будут помещены данные из каталога app
+#    volumes:
+#      - ./app/:/usr/src/app/
+#    # Открываем порт 8000 внутри и снаружи
+#    ports:
+#      - 8000:8000
+#    # Файл содержащий переменные для контейнера
+#    env_file:
+#      - ./.env
 
 #  django_api:
 #    build:
@@ -22,7 +72,7 @@ services:
 #      dockerfile: Dockerfile
 #    restart: always
 #
-#    env_file: .env.dev
+#    env_file: .env
 #    depends_on:
 #      pgdb:
 #        condition: service_healthy
@@ -37,7 +87,7 @@ services:
 #    ports:
 #      - 8000:8000
 #    env_file:
-#      - ./.env.dev
+#      - ./.env
 
 #    depends_on:
 #      - pgdb
