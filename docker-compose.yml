@@ -1,53 +1,45 @@
 version: '3.8'
 
-volumes:
-  postgres_data:
-  static:
-  media:
-  nginx_conf:
-
 services:
-  db:
-    image: postgres:12.4
-    restart: always
-    volumes:
-      - postgres_data:/var/lib/postgresql/data/
+  api:
+    # Берем Dockerfile из каталога app
+    build: .
+    # Запускаем сервер gunicorn
+    command: gunicorn todolist.wsgi:application --bind 0.0.0.0:8000
+    # Открываем порт 8000 внутри и снаружи
+    ports:
+      - 8000:8000
     env_file:
       - ./.env
-
-  django:
-    image: matakov/yamdb:latest
+    # Дожидаемся запуска контейнера db
     depends_on:
       - db
-    restart: always
+  db:
+    # Образ и версия базы, которую мы будем использовать
+    image: postgres:12.0-alpine
+    # Внешний том(volume) и место где он будет подключен внутри контейнера
+    volumes:
+      - postgres_volume:/var/lib/postgresql/data/
     env_file:
       - ./.env
-    volumes:
-      - static:/code/static
-      - media:/code/media
-      - nginx_conf:/code/nginx/
-    entrypoint: /code/entrypoint.sh
-
-  nginx:
-    image: nginx:1.19.0-alpine
+  front :
+    image: sermalenk/skypro-front:lesson-34
+    restart: always
+    depends_on:
+      - api
     ports:
       - "80:80"
-    volumes:
-      - static:/code/static
-      - media:/code/media
-      - nginx_conf:/etc/nginx/conf.d/
-    depends_on:
-      - django
-    restart: always
+
+volumes:
+  postgres_volume:
 
 
-
-#version: '3.8'
-#
 #services:
 #  web:
 #    # Берем Dockerfile из каталога app
-#    build: ./app
+#    build:
+#      context: .
+#      dockerfile: Dockerfile
 #    # Запускаем тестовый сервер
 #    command: python manage.py runserver 0.0.0.0:8000
 #    # куда будут помещены данные из каталога app
