@@ -45,4 +45,4 @@ jobs:
           password: ${{secrets.PASSWORD}}
           script: |
             cd todolist
-            docker-compose up -d
+            echo ${{secrets.PASSWORD}} | -S docker-compose up -d
