@@ -1,0 +1,13 @@
+name : Boild
+on : [push]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: list dir
+        run: ls-la
+      - name: clone code
+        uses: actions/checkout@v2
+      - name: list dir 2
+        run: ls-la
+
