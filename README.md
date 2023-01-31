@@ -1,6 +1,9 @@
 # Подготовка проекта
 программирования на Python (ISA)
 
+Status of Last Deployment:<br>
+<img src="https://github.com/adv4000/todolist/workflows/Build_todolist/badge.svg?branch=master"><br>
+
 ### Шаг 2. Деплой.
 
 

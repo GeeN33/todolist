@@ -1,4 +1,4 @@
-name : Build todolist
+name : Build_todolist
 on : [push]
 jobs:
   build:
