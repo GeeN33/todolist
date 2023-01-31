@@ -19,8 +19,10 @@ services:
     # Внешний том(volume) и место где он будет подключен внутри контейнера
     volumes:
       - postgres_volume:/var/lib/postgresql/data/
-    env_file:
-      - ./.env
+    environment:
+      - POSTGRES_DB=$DB_NAME
+      - POSTGRES_USER=$DB_USER
+      - POSTGRES_PASSWORD=$DB_PASSWORD
   front :
     image: sermalenk/skypro-front:lesson-34
     restart: always
@@ -31,72 +33,6 @@ services:
 
 volumes:
   postgres_volume:
-
-
-#services:
-#  web:
-#    # Берем Dockerfile из каталога app
-#    build:
-#      context: .
-#      dockerfile: Dockerfile
-#    # Запускаем тестовый сервер
-#    command: python manage.py runserver 0.0.0.0:8000
-#    # куда будут помещены данные из каталога app
-#    volumes:
-#      - ./app/:/usr/src/app/
-#    # Открываем порт 8000 внутри и снаружи
-#    ports:
-#      - 8000:8000
-#    # Файл содержащий переменные для контейнера
-#    env_file:
-#      - ./.env
-
-#  django_api:
-#    build:
-#      context: .
-#      dockerfile: Dockerfile
-#    restart: always
-#
-#    env_file: .env
-#    depends_on:
-#      pgdb:
-#        condition: service_healthy
-
-#  django:
-#    build:
-#      context: .
-#      dockerfile: Dockerfile
-#    command: python manage.py runserver 0.0.0.0:8000
-#    volumes:
-#      - ./app/:/usr/src/app/
-#    ports:
-#      - 8000:8000
-#    env_file:
-#      - ./.env
-
-#    depends_on:
-#      - pgdb
-
-#
-#  pgdb:
-#    image: postgres:13-alpine
-#    restart: always
-#    container_name: pgdb
-#    environment:
-#      - POSTGRES_DB=postgresdb
-#      - POSTGRES_USER=postgres
-#      - POSTGRES_PASSWORD=postgres
-#    volumes:
-#      - pgdata:/var/lib/postgresql/data/
-#    ports:
-#      - "5452:5432"
-#
-#volumes:
-#  pgdata:
-
-
-
-
 
 
 
