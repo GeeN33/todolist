@@ -27,7 +27,7 @@ jobs:
         run: |
           mkdir deploy
           cat docker-compose-ci.yaml | envsubst > deploy/docker-compose.yaml
-          cat .env | envsubst > deploy/.env
+          cat '.env' | envsubst > 'deploy/.env'
       - name: server push
         uses: appleboy/scp-action@master
         with:
