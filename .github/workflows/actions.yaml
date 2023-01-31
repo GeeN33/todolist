@@ -43,6 +43,6 @@ jobs:
           host: ${{secrets.HOST}}
           username: ${{secrets.USERNAME}}
           password: ${{secrets.PASSWORD}}
-          script:
-            - cd todolist
-            - docker-compose up -d
+          script: |
+            cd todolist
+            docker-compose up -d
