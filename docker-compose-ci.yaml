@@ -20,9 +20,9 @@ services:
     volumes:
       - postgres_volume:/var/lib/postgresql/data/
     environment:
-      - POSTGRES_DB=$DB_NAME
-      - POSTGRES_USER=$DB_USER
-      - POSTGRES_PASSWORD=$DB_PASSWORD
+      - POSTGRES_DB = $DB_NAME
+      - POSTGRES_USER = $DB_USER
+      - POSTGRES_PASSWORD = $DB_PASSWORD
   front :
     image: sermalenk/skypro-front:lesson-34
     restart: always
