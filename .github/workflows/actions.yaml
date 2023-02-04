@@ -38,7 +38,7 @@ jobs:
           username: ${{secrets.USERNAME}}
           password: ${{secrets.PASSWORD}}
           source: "deploy/*"
-          target: "todolist"
+          target: "todolist2"
           strip_components: 1
       - name: deploy app
         uses: appleboy/ssh-action@master
@@ -47,7 +47,7 @@ jobs:
           username: ${{secrets.USERNAME}}
           password: ${{secrets.PASSWORD}}
           script: |
-            cd todolist
+            cd todolist2
             docker-compose up -d
 
 #2344_245ghhh
