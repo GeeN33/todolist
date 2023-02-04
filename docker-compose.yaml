@@ -19,19 +19,19 @@ services:
       timeout: 5s
       retries: 5
 
-#  migrations:
-#    build:
-#      context: .
-#    depends_on:
-#      db:
-#        condition: service_healthy
-#    command: sh -c "python manage.py migrate"
+  migrations:
+    build:
+      context: .
+    depends_on:
+      db:
+        condition: service_healthy
+    command: sh -c "python manage.py migrate"
 
   api:
     build: .
-#    command: python manage.py runserver 0.0.0.0:8000
+    command: python manage.py runserver 0.0.0.0:8000
     volumes:
-     - ./todolist/:/opt/todolist
+       - ./todolist/:/opt/todolist
     ports:
       - 8000:8000
     env_file:
@@ -39,8 +39,8 @@ services:
     depends_on:
       db:
         condition: service_healthy
-#      migrations:
-#        condition: service_completed_successfully
+      migrations:
+        condition: service_completed_successfully
 
   front :
     image: sermalenk/skypro-front:lesson-34
@@ -49,8 +49,6 @@ services:
       - "80:80"
     depends_on:
       - api
-
-
 
 
 
