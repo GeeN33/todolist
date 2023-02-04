@@ -20,20 +20,12 @@ services:
       timeout: 5s
       retries: 5
 
-  migrations:
-    build:
-      context: .
-    depends_on:
-      db:
-        condition: service_healthy
-    command: sh -c "python manage.py migrate"
 
   api:
     image: geen33/todolist_image:$GITHUB_REF_NAME-$GITHUB_RUN_ID
 
-    command: python manage.py runserver 0.0.0.0:8000
     volumes:
-      - .:/usr/src/app/
+       - ./todolist/:/opt/todolist
     ports:
       - 8000:8000
     env_file:
@@ -41,8 +33,7 @@ services:
     depends_on:
       db:
         condition: service_healthy
-      migrations:
-        condition: service_completed_successfully
+
 
   front :
     image: sermalenk/skypro-front:lesson-34
