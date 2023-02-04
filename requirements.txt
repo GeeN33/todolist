@@ -8,8 +8,12 @@ cleo==2.0.1
 crashtest==0.4.1
 cryptography==37.0.4
 defusedxml==0.7.1
+Deprecated==1.2.13
 distlib==0.3.6
 Django==4.1.6
+django-braces==1.15.0
+django-oauth-toolkit==2.2.0
+django-rest-framework-social-oauth2==1.1.0
 djangorestframework==3.14.0
 dulwich==0.20.46
 filelock==3.8.0
@@ -19,6 +23,7 @@ idna==3.4
 jaraco.classes==3.2.3
 jeepney==0.8.0
 jsonschema==4.16.0
+jwcrypto==1.4.2
 keyring==23.9.3
 lockfile==0.12.2
 more-itertools==8.14.0
@@ -58,3 +63,4 @@ urllib3==1.26.12
 virtualenv==20.17.1
 virtualenv-clone==0.5.7
 webencodings==0.5.1
+wrapt==1.14.1

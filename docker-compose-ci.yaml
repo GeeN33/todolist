@@ -1,38 +1,58 @@
-version: '3.8'
+version: '3.9'
+
+volumes:
+  pg_data:
 
 services:
+
+  db:
+    image: postgres
+    restart: always
+    environment:
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=postgres
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres -d postgres" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  migrations:
+    build:
+      context: .
+    depends_on:
+      db:
+        condition: service_healthy
+    command: sh -c "python manage.py migrate"
+
   api:
     image: geen33/todolist_image:$GITHUB_REF_NAME-$GITHUB_RUN_ID
 
-    command: gunicorn todolist.wsgi:application --bind 0.0.0.0:8000
-    # Открываем порт 8000 внутри и снаружи
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/usr/src/app/
     ports:
       - 8000:8000
-#    env_file:
-#      - ./.env
-    # Дожидаемся запуска контейнера db
+    env_file:
+      - .env
     depends_on:
-      - db
-  db:
-    # Образ и версия базы, которую мы будем использовать
-    image: postgres:12.0-alpine
-    # Внешний том(volume) и место где он будет подключен внутри контейнера
-    volumes:
-      - postgres_volume:/var/lib/postgresql/data/
-    environment:
-      - POSTGRES_DB=$DB_NAME
-      - POSTGRES_USER=$DB_USER
-      - POSTGRES_PASSWORD=$DB_PASSWORD
+      db:
+        condition: service_healthy
+      migrations:
+        condition: service_completed_successfully
+
   front :
     image: sermalenk/skypro-front:lesson-34
     restart: always
-    depends_on:
-      - api
     ports:
       - "80:80"
+    depends_on:
+      - api
 
-volumes:
-  postgres_volume:
+
 
 
 
