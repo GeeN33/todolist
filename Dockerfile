@@ -1,20 +1,21 @@
-FROM python:3.10-slim
-MAINTAINER painassasin@icloud.com
+# pull official base image
+FROM python:3.10-alpine
 
-WORKDIR /opt/
+# set work directory
+WORKDIR /usr/src/app
 
-EXPOSE 8000
+# set environment variables
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
 
-# Устанавливаем зависимости для Postgre
-#RUN apk update \
-#    && apk add postgresql-dev gcc python3-dev musl-dev
+# install psycopg2 dependencies
+RUN apk update \
+    && apk add postgresql-dev gcc python3-dev musl-dev
 
-# устанавливаем зависимости
+# install dependencies
 RUN pip install --upgrade pip
 COPY ./requirements.txt .
 RUN pip install -r requirements.txt
 
-# копируем содержимое текущей папки в контейнер
+# copy project
 COPY . .
-
-ENTRYPOINT ["bash", "entrypoint.sh"]
