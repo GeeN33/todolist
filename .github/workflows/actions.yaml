@@ -29,6 +29,8 @@ jobs:
           cat docker-compose-ci.yaml | envsubst > deploy/docker-compose.yaml
           cat .env | envsubst > deploy/.env
           cat Dockerfile | envsubst > deploy/Dockerfile
+          cat requirements.txt | envsubst > deploy/requirements.txt
+
       - name: server push
         uses: appleboy/scp-action@master
         with:
