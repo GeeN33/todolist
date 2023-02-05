@@ -2,7 +2,7 @@ from django.contrib.auth import authenticate
 from django.contrib.auth.hashers import make_password
 from rest_framework import serializers
 from django.contrib.auth.password_validation import validate_password
-from rest_framework.exceptions import AuthenticationFailed, NotAuthenticated
+from rest_framework.exceptions import AuthenticationFailed, ValidationError
 
 from core.models import User
 class PasswordField(serializers.CharField):
@@ -49,20 +49,19 @@ class  ProfileSerializer(serializers.ModelSerializer):
        model = User
        fields = ['id', 'username', 'first_name', 'last_name', 'email']
 
-class  UpdatePasswordSerializer(serializers.Serializer):
+class UpdatePasswordSerializer(serializers.Serializer):
+    old_password = serializers.CharField(required=True, style={'input_type': 'password'}, write_only=True)
+    new_password = PasswordField(required=True)
 
-   user = serializers.HiddenField(default=serializers.CurrentUserDefault())
-   old_password = PasswordField(required=True)
-   new_password = PasswordField(required=True)
-   def validate(self, data):
-       if not (user := data['user']):
-           raise NotAuthenticated
-       if not user.check_password(data['old_password']):
-           raise serializers.ValidationError(' not password')
-       return data
-   def create(self, validated_data):
+    def validate_old_password(self, old_password: str) -> str:
+        if not self.instance.check_password(old_password):
+            raise ValidationError('Password is incorrect')
+        return old_password
+
+    def update(self, instance: User, validated_data: dict) -> User:
+        instance.set_password(validated_data['new_password'])
+        instance.save(update_fields=('password',))
+        return instance
+
+    def create(self, validated_data):
         raise NotImplementedError
-   def update(self, instance, validated_data):
-       instance.password = make_password(validated_data('new_password'))
-       instance.save(update_fields=('password',))
-       return instance

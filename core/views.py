@@ -31,9 +31,11 @@ class ProfileView(RetrieveUpdateDestroyAPIView):
       logout(request)
       return Response(status=status.HTTP_204_NO_CONTENT)
 
+
 class UpdatePasswordView(UpdateAPIView):
+   permission_classes = [permissions.IsAuthenticated]
    serializer_class = UpdatePasswordSerializer
-   permission_classes = [ permissions.IsAuthenticated]
+
    def get_object(self):
       return self.request.user
 
