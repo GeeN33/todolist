@@ -3,6 +3,7 @@ version: '3.9'
 volumes:
   pg_data:
 
+
 services:
   db:
     image: postgres
