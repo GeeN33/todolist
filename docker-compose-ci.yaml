@@ -43,7 +43,7 @@ services:
         condition: service_completed_successfully
 
   front :
-    image: sermalenk/skypro-front:lesson-36
+    image: sermalenk/skypro-front:lesson-37
     restart: always
     ports:
       - "80:80"
