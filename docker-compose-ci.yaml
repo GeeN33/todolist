@@ -30,8 +30,6 @@ services:
     image: geen33/todolist_image:$GITHUB_REF_NAME-$GITHUB_RUN_ID
 
     command: python manage.py runserver 0.0.0.0:8000
-    volumes:
-      - ./todolist/:/opt/todolist
     ports:
       - 8000:8000
     env_file:
@@ -43,7 +41,7 @@ services:
         condition: service_completed_successfully
 
   front :
-    image: sermalenk/skypro-front:lesson-37
+    image: sermalenk/skypro-front:lesson-38
     restart: always
     ports:
       - "80:80"
