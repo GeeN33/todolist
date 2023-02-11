@@ -27,11 +27,11 @@ class VerificationViews(generics.GenericAPIView):
                 tguser[0].verification_True = True
                 tguser[0].save()
                 strrez = "verification has been completed \n"
-                strrez = strrez + f"добро пожаловать на борт {request.user.username} - {tguser[0].user_id } \n"
+                strrez = strrez + f"добро пожаловать на борт {request.user.username} \n"
                 strrez = strrez + HELP_COMMAND
                 send_message(tguser[0].tg_id, strrez )
             else:
-                send_message(tguser[0].tg_id, f"ты уже на борту {request.user.username} - {tguser[0].user_id }")
+                send_message(tguser[0].tg_id, f"ты уже на борту {request.user.username} ")
             data = {
                 "tg_id": tguser[0].tg_id,
                 "username": tguser[0].username,
