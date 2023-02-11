@@ -40,6 +40,13 @@ services:
       migrations:
         condition: service_completed_successfully
 
+  tg_bot:
+    image: geen33/todolist_image:$GITHUB_REF_NAME-$GITHUB_RUN_ID
+
+    command: python manage.py runbot
+    depends_on:
+      - api
+
   front :
     image: sermalenk/skypro-front:lesson-38
     restart: always
