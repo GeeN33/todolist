@@ -37,7 +37,6 @@ class GoalCategorySerializer(serializers.ModelSerializer):
             'is_deleted': {'write_only': True}
         }
 
-
 class GoalCreateSerializer(serializers.ModelSerializer):
     category = serializers.PrimaryKeyRelatedField(
         queryset=GoalCategory.objects.filter(is_deleted=False)

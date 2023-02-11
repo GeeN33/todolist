@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'social_django',
     'core',
     'goals',
+    'bot',
 ]
 
 MIDDLEWARE = [
@@ -94,6 +95,8 @@ DATABASES = {
     'default': {
         # 'ENGINE': 'django.db.backends.sqlite3',
         # 'NAME': BASE_DIR / 'db.sqlite3',
+
+
         'ENGINE': os.environ.get('DB_ENGINE'),
         'NAME': os.environ.get('POSTGRES_DB'),
         'USER': os.environ.get('POSTGRES_USER'),
@@ -163,6 +166,7 @@ REST_FRAMEWORK = {
 }
 
 
+TOKEN = os.environ.get('TOKEN')
 
 # Social Oauth
 # SOCIAL_AUTH_POSTGRES_JSONFIELD = True
